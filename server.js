@@ -45,4 +45,6 @@ app.use('/api/contacts', require('./mongoose/routes/contactsRoutes'))
 app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'posts')))
 app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'ui')))
 
+app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
+
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))
