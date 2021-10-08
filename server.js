@@ -1,31 +1,30 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const PORT      = process.env.NODE_ENV  === 'production' ? process.env.PORT      : require('./config/keys').PORT
-const MONGO_URI = process.env.NODE_ENV  === 'production' ? process.env.MONGO_URI : require('./config/keys').MONGO_URI
-// const mongoStart = require('./mongoose/db/start')
+const PORT = process.env.PORT || require('./config/keys').PORT
+const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
 const app = express()
 
-const mongoStart = async () => {
-  try {
-    mongoose.connect(MONGO_URI, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useFindAndModify: false
-    }, () => console.log(`Connected to MongoDB...`))
-  } catch (error) {
-    process.disconnect(() => (`Unable to connect. Errors: ${error}`))
-  }
-}
+mongoose.connect(MONGO_URI, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false
+})
+.then(() => console.log("Connected to MongoDb"))
+.catch(error => process.disconnect(() => (`Unable to connect. Errors: ${error}`)))
 
-
-mongoStart()
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
+  res.setHeader('Access-Control-Allow-Credentials', true)
+  next()
+});
 
 app.use(cors({
-  origin: ["*"
-  ],
+  origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   preflightContinue: false,
@@ -44,13 +43,6 @@ app.use('/api/users', require('./mongoose/routes/usersRoutes'))
 app.use('/api/contacts', require('./mongoose/routes/contactsRoutes'))
 
 app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'posts')))
-
-if (process.env.NODE_ENV === 'production') {
-}
-app.use(express.static(path.join(__dirname, "site", "build")))
-app.use(express.static(path.join(__dirname, "admin", "build")))
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, "site", "build", "index.html")))
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, "admin", "build", "index.html")))
-
+app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'ui')))
 
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))
