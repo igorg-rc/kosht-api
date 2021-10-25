@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const ListSchema = mongoose.Schema({
   title: {
     type: String,
-    required: [true, "Please, provide a title"]
+    required: false
   },
   posts: [{
     type: mongoose.Schema.Types.ObjectId, 

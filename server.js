@@ -42,8 +42,9 @@ app.use('/api/actions', require('./mongoose/routes/actionsRoutes'))
 app.use('/api/users', require('./mongoose/routes/usersRoutes'))
 app.use('/api/contacts', require('./mongoose/routes/contactsRoutes'))
 
+app.use('/downloads/images/ui/contacts', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'contacts')))
+app.use('/downloads/images/ui/categories', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'categories')))
 app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'posts')))
-app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'ui')))
 
 app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
 

@@ -5,18 +5,26 @@ const postImageUpload = require('../../helpers/uploadFile')
 
 
 router.get('/', async (req, res) => {
+  // const skip = req.query.skip && /^\d+$/.test(req.query.skip) ? Number(req.query.skip) : 0
+  const limit = req.query.limit && /^\d+$/.test(req.query.limit) ? parseInt(req.query.limit) : 0
+  const page = req.query.page ? parseInt(req.query.page) : 0
+
+  const startIndex = (page - 1) * limit
+  const endIndex = page * limit
   try {
     const posts = await Post
-      .find({}, null, {sort: '-createdAt'})
+      .find()
+      .sort('-createdAt')
       .populate('tags')
       .populate('categories')
     if (!posts || posts.length == 0) {
       return res.status(404).json({ status:404, success: false, message: "Posts were not fond" })
     }
+    const postResults = posts.slice(startIndex, endIndex)
     res.status(200).json(posts)
   } catch (error) {
     console.log(error)
-    return res.status(500).json(error)    
+    return res.status(500).json({ message: error.message})    
   }
 })
 
@@ -25,7 +33,7 @@ router.get('/readmore/:slug', async (req, res) => {
   const { slug } = req.params
   try {
     const posts = await Post.find({}, null, {sort: '-createdAt'})
-    selected_posts = posts.filter(item => item.slug != slug).slice(0, 5)
+    selected_posts = posts.filter(item => item.slug !== slug)
     if (!selected_posts) {
       return res.status(404).json(`Requsted posts were not found!`)
     }
@@ -39,8 +47,8 @@ router.get('/readmore/:slug', async (req, res) => {
 router.get('/slug/:slug', async (req, res) => {
   const { slug } = req.params
   const post = await Post.find({ slug: slug }).populate('categories')
-  const selected_post = post[0]
-  res.status(200).json(selected_post)
+  const selectedPost = post[0]
+  res.status(200).json(selectedPost)
   try {
     const post = await Post.find({ slug: slug })
     if (!mongoose.Types.ObjectId.isValid(slug) || !post) { 

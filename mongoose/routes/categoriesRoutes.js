@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const { makeSlugEn } = require('../../helpers/makeSlug')
 const Category = require('../models/Category')
-const uploadFile = require('../../helpers/uploadFile')
+const { uploadCategoryFile } = require('../../helpers/uploadFile')
 const deleteFile = require('../../helpers/deleteFile')
 
 
@@ -38,7 +38,7 @@ router.get('/id/:id', async (req, res) => {
 })
 
 
-router.post('/', uploadFile.single('image'), async (req, res) => {
+router.post('/', uploadCategoryFile.single('image'), async (req, res) => {
   const title_ua = req.body ? req.body.title_ua : ""
   const title_en = req.body ? req.body.title_en : ""
   const slug = makeSlugEn(title_en)
@@ -56,7 +56,7 @@ router.post('/', uploadFile.single('image'), async (req, res) => {
 })
 
 
-router.patch('/id/:id', uploadFile.single("image"), async (req, res) => {
+router.patch('/id/:id', uploadCategoryFile.single("image"), async (req, res) => {
   const { id } = req.params
   try {
     const category = await Category.findById(id)
