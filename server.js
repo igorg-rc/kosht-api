@@ -46,6 +46,6 @@ app.use('/downloads/images/ui/contacts', express.static(path.join(__dirname, 'do
 app.use('/downloads/images/ui/categories', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'categories')))
 app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'posts')))
 
-// app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
+app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
 
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))
