@@ -62,10 +62,10 @@ router.patch('/:id', uploadContactFile.single('image'), async (req, res) => {
     if (contact.imgUrl && req.file.path) {
       deleteFile(contact.imgUrl)
     }
-    contact.title_ua = req.body.title_ua
-    contact.title_en = req.body.title_en
-    contact.link = req.body.link
-    contact.imgUrl = req.file.path
+    contact.title_ua = req.body.title_ua ? req.body.title_ua : contact.title_ua
+    contact.title_en = req.body.title_en ? req.body.title_en : contact.title_en
+    contact.link = req.body.link ? req.body.link : contact.link
+    contact.imgUrl = req.file ? req.file.path : contact.imgUrl
     await contact.save()
     res.status(200).json({ success: true, message: 'Contact was successfuly updated!', data: contact })
   } catch (error) {

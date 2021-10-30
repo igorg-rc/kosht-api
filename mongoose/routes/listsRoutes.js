@@ -56,7 +56,7 @@ router.post('/', async (req, res) => {
 })
 
 
-router.patch('/:id' , async (req, res) => {
+router.patch('/id/:id' , async (req, res) => {
   const { id } = req.params
   const {title_ua, title_en, posts, qty} = req.body
   const slug = getSlug(title_en)
@@ -65,13 +65,13 @@ router.patch('/:id' , async (req, res) => {
     if (!list || !mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).json(`Requested list with id ${id} was not found!`)
     }
-    list.title_ua = req.body.title_ua ? title_ua : list.title_ua
-    list.title_en = req.body.title_en ? title_en : list.title_en
-    list.slug = req.body.title_en ? slug : list.slug
-    list.posts = req.body.posts ? posts : list.posts
-    list.qty = req.body.qty     ? qty   : list.qty
-    const updatedList = await(list.save())
-    console.log(title, posts, qty)
+    list.title_ua = title_ua ? title_ua : list.title_ua
+    list.title_en = title_en ? title_en : list.title_en
+    list.slug = title_en ? slug : list.slug
+    list.posts = posts ? posts : list.posts
+    list.qty = qty     ? qty   : list.qty
+    const updatedList = await list.save()
+    console.log(title_ua, title_en, slug, posts, qty)
     res.status(201).json(updatedList)
   } catch (error) {
     console.log(error)
