@@ -5,9 +5,9 @@ const PORT = process.env.PORT || require('./config/keys').PORT
 const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
 const app = express()
-const { User } = require('./mongoose/models/User')
-const ejs = require('ejs')
-const sendMail = require('./helpers/nodemailer')
+// const { User } = require('./mongoose/models/User')
+// const ejs = require('ejs')
+// const sendMail = require('./helpers/nodemailer')
 
 mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true,
@@ -58,7 +58,7 @@ app.use('/downloads/images/posts', express.static(path.join(__dirname, 'download
 
 app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
 
-sendMail()
+// sendMail()
 // const usersList = users.find({}, (err, data) => err, data, data.length)
 // console.log(usersList)
 
