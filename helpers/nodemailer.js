@@ -45,7 +45,7 @@ const sendMail = () => {
       User.find().then(users => users.forEach(element => subscribers.push(element.email))).catch(error => console.log(error))
       const output = posts.map(i => 
         `<div style="font-size: 18px">
-          <a href="http://localhost:3000/${i.slug}">${(i.title)}</a>
+          <a href="https://kosht-clone.netlify.app/${i.slug}">${(i.title)}</a>
         </div>`
       )
       transporter.sendMail({
@@ -64,7 +64,6 @@ const sendMail = () => {
       })
     })
     .catch(error => console.log(error))
-
   })
 }
 
