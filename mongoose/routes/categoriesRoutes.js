@@ -38,42 +38,65 @@ router.get('/id/:id', async (req, res) => {
 })
 
 
-router.post('/', uploadCategoryFile.single('image'), async (req, res) => {
-  const title_ua = req.body ? req.body.title_ua : ""
-  const title_en = req.body ? req.body.title_en : ""
-  const slug = makeSlugEn(title_en)
-  const imgUrl = req.file ? req.file.path : null
-  try {
-    const category = new Category({ title_ua, title_en, slug, imgUrl })
-    if (!title_ua || !title_en || !imgUrl) {
-      return res.status(400).json({ message: 'Fill title and image fields!'})
+router.post(
+  '/', 
+  uploadCategoryFile.fields([
+    {name: "img_main", maxCount: 1}, 
+    {name: "img_hover", maxCount: 1}
+  ]), 
+  async (req, res) => {
+    const title_ua = req.body ? req.body.title_ua : ""
+    const title_en = req.body ? req.body.title_en : ""
+    const slug = makeSlugEn(title_en)
+    const imgUrl_main = req.files ? req.files.img_main[0].path : null
+    const imgUrl_hover = req.files ? req.files.img_hover[0].path : null
+    try {
+      const category = new Category({ title_ua, title_en, slug, imgUrl_main, imgUrl_hover })
+      if (!title_ua || !title_en || !imgUrl_main || !imgUrl_hover) {
+        return res.status(400).json({ message: 'Fill titles and images fields!'})
+      }
+      await category.save()
+      res.status(201).json(category)
+    } catch (error) {
+      res.status(500).json(error)
     }
-    await category.save()
-    res.status(201).json(category)
-  } catch (error) {
-    res.status(500).json(error)
+    // if (req.files){ 
+    //   console.log(req.files.img_main[0].path) 
+    //   console.log(req.files.img_hover[0].path) 
+    // }
   }
-})
+)
 
 
-router.patch('/id/:id', uploadCategoryFile.single("image"), async (req, res) => {
-  const { id } = req.params
-  try {
-    const category = await Category.findById(id)
-    if (!category) return res.status(404).json("Requested category was not found!")
-    if (category.imgUrl && req.file) {
-      deleteFile(category.imgUrl)
+router.patch(
+  '/id/:id', 
+  uploadCategoryFile.fields([
+    {name: "img_main", maxCount: 1}, 
+    {name: "img_hover", maxCount: 1}
+  ]), 
+  async (req, res) => {
+    const { id } = req.params
+    try {
+      const category = await Category.findById(id)
+      if (!category) return res.status(404).json("Requested category was not found!")
+      if (category.imgUrl_main) {
+        deleteFile(category.imgUrl_main)
+      }
+      if (category.imgUrl_hover) {
+        deleteFile(category.imgUrl_hover)
+      }
+      category.title_ua = req.body ? req.body.title_ua : category.title_ua
+      category.title_en = req.body ? req.body.title_en : category.title_en
+      category.slug = req.body ? getSlug(req.body.title_en) : category.slug
+      category.imgUrl_main = req.files ? req.files.img_main[0].path : category.imgUrl_main
+      category.imgUrl_hover = req.files ? req.files.img_hover[0].path : category.imgUrl_hover
+      await category.save()
+      res.status(201).json({ success: true, category: category, status: 201 })
+    } catch (error) {
+      res.status(500).json(error)
     }
-    category.title_ua = req.body ? req.body.title_ua : category.title_ua
-    category.title_en = req.body ? req.body.title_en : category.title_en
-    category.slug = req.body ? getSlug(req.body.title_en) : category.slug
-    category.imgUrl = req.file ? req.file.path : category.imgUrl
-    await category.save()
-    res.status(201).json({ success: true, category: category, status: 201 })
-  } catch (error) {
-    res.status(500).json(error)
   }
-})
+)
 
 
 router.delete('/id/:id', async (req, res) => {
@@ -81,8 +104,11 @@ router.delete('/id/:id', async (req, res) => {
   try {
     const category = await Category.findById(id)
     if (!category) return res.status(404).json("Requested category was not found!")
-    if (category.imgUrl) {
-      deleteFile(category.imgUrl)
+    if (category.imgUrl_main) {
+      deleteFile(category.imgUrl_main)
+    }
+    if (category.imgUrl_hover) {
+      deleteFile(category.imgUrl_hover)
     }
   } catch (error) {
     return res.status(500).json({ success: false, error: error })

@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
     return res.status(201).json({ 
       success: true, 
       status: 201, 
-      message: 'New user was successfuly created!', data: newUser 
+      message: 'New user has been successfuly created!', data: newUser 
     })
   } catch (error) {
     console.log(error)

@@ -5,6 +5,9 @@ const PORT = process.env.PORT || require('./config/keys').PORT
 const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
 const app = express()
+const { User } = require('./mongoose/models/User')
+// const ejs = require('ejs')
+const sendMail = require('./helpers/nodemailer')
 
 mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true,
@@ -14,6 +17,13 @@ mongoose.connect(MONGO_URI, {
 })
 .then(() => console.log("Connected to MongoDb"))
 .catch(error => process.disconnect(() => (`Unable to connect. Errors: ${error}`)))
+
+// mongoose.connection.on('open', ref => {
+//   console.log('Connected to Mongo server')
+//   mongoose.connection.db.listCollections().toArray((err, names) => {
+//     console.log(names[0])
+//   })
+// })
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -47,5 +57,21 @@ app.use('/downloads/images/ui/categories', express.static(path.join(__dirname, '
 app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'posts')))
 
 app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
+
+// sendMail()
+// const usersList = users.find({}, (err, data) => err, data, data.length)
+// console.log(usersList)
+
+// const showUsers = async () => {
+//   const users = await User.find()
+//   emailList = await users.forEach(el => el.email)
+//   console.log(emailList)
+// }
+
+// showUsers()
+
+  // const subscribers = []
+  // User.find().then(users => users.forEach(element => subscribers.push(element.email))).then(res => console.log(subscribers))
+  // console.log(subscribers)
 
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))

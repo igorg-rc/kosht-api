@@ -13,9 +13,13 @@ const CategorySchema = mongoose.Schema({
     type: String,
     required: [true, "Please, provide a slug"]
   },
-  imgUrl: {
+  imgUrl_main: {
     type: String,
-    required: [true, "Please, provide an image"]
+    required: [true, "Please, provide the main image"]
+  },
+  imgUrl_hover: {
+    type: String,
+    required: [true, "Please, provide the hover image"]
   }
 })
 

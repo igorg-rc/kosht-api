@@ -3,9 +3,9 @@ const joi = require('joi')
 
 const UserSchema = mongoose.Schema({
   email: { type: String }
-}, {
-  timestamps: true
-})
+}, 
+{timestamps: true}
+)
 
 const User = mongoose.model("User", UserSchema)
 
