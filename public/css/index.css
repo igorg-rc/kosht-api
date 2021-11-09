@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+@import url('./files/fonts/gilroy/stylesheet.css');
+
+body { 
+  padding-top:50px; 
+  background-color: #E5E5E5; 
+  font-family: 'Gilroy', 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.jumbotron {
+  background: #FFFFFF;
+  box-shadow: 0px 8px 25px rgba(83, 89, 144, 0.07);
+  border-radius: 6px;
+}
+
+.articles {
+  padding-top: 20px;
+}
+
+.article-list {
+  list-style-type: none;
+  font-size: 16px;
+  font-family: 'Gilroy';
+}
+
+.article-list-item {
+  margin-top: 10px;
+}
+
+.article-item-link {
+  font-family: 'Roboto', sans-serif; 
+  color: #2E3A59;
+  font-weight: 500;
+}
+
+.article-item-link:hover {
+  color: #5669FF !important;
+  cursor: pointer !important;
+  text-decoration: none;
+}
+
+h1 {
+  font-family: 'Gilroy', sans-serif;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 150%;
+  text-align: center;
+  color: #2E3A59;
+}
+
+.description {
+  font-family: 'Roboto', sans-serif;
+  color: #A5A5A5;
+  font-size: 12px;
+}
+
+.date {
+  font-size: 12px;
+  font-weight: 500;
+}

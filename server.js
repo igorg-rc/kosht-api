@@ -5,9 +5,18 @@ const PORT = process.env.PORT || require('./config/keys').PORT
 const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
 const app = express()
-// const { User } = require('./mongoose/models/User')
-// const ejs = require('ejs')
-// const sendMail = require('./helpers/nodemailer')
+const livereload = require("livereload");
+const connectLiveReload = require("connect-livereload");
+const Post = require('./mongoose/models/Post')
+const { User } = require('./mongoose/models/User')
+const sendMail = require('./helpers/nodemailer')
+
+const liveReloadServer = livereload.createServer();
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/");
+  }, 100);
+})
 
 mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true,
@@ -24,6 +33,7 @@ mongoose.connect(MONGO_URI, {
 //     console.log(names[0])
 //   })
 // })
+app.set('view engine', 'ejs')
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -43,6 +53,7 @@ app.use(cors({
 
 app.use(express.json({ extended: true }))
 app.use(express.urlencoded({ extended: true }))
+app.use(connectLiveReload())
 
 app.use('/api/posts', require('./mongoose/routes/postsRoutes'))
 app.use('/api/tags', require('./mongoose/routes/tagsRoutes'))
@@ -55,23 +66,22 @@ app.use('/api/contacts', require('./mongoose/routes/contactsRoutes'))
 app.use('/downloads/images/ui/contacts', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'contacts')))
 app.use('/downloads/images/ui/categories', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'categories')))
 app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'posts')))
+app.use('/public', express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
 
+app.get('/test-route/:email', (req, res) => {
+  Post.find().then(posts => {
+    User.findOne({ email: req.params.email }).then(user => {
+      res.render('pages/index', { 
+        articles: posts,
+        email: req.params.email
+      })
+    })
+  })
+})
+
 // sendMail()
-// const usersList = users.find({}, (err, data) => err, data, data.length)
-// console.log(usersList)
 
-// const showUsers = async () => {
-//   const users = await User.find()
-//   emailList = await users.forEach(el => el.email)
-//   console.log(emailList)
-// }
-
-// showUsers()
-
-  // const subscribers = []
-  // User.find().then(users => users.forEach(element => subscribers.push(element.email))).then(res => console.log(subscribers))
-  // console.log(subscribers)
 
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))

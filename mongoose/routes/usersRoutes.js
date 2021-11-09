@@ -3,6 +3,12 @@ const mongoose = require('mongoose')
 const {User, validate} = require('../models/User')
 
 
+router.get('/test', (req, res) => {
+  res.render('pages/index')
+  console.log('test route reched!')
+})
+
+
 router.get('/', async (req, res) => {
   try {
     const users = await User.find()
@@ -22,11 +28,35 @@ router.get('/', async (req, res) => {
 })
 
 
-router.get('/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
   const { id } = req.params
   try {
     const user = await User.findById(id)
     if (!user || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ 
+        success: false, 
+        status: 404, 
+        message: `Requested user with id=${id} was not found!` 
+    })}
+    res.status(200).json({
+      success: true,
+      status: 200,
+      data: user
+    })
+  } catch (error) {
+    return res.status(500).json({ 
+      success: false,
+      status: 500,
+      message: 'Server error!' 
+    })
+  }
+})
+
+router.get('/email/:email', async (req, res) => {
+  const { email } = req.params
+  try {
+    const user = await User.findOne({ email: email })
+    if (!user) {
       return res.status(404).json({ 
         success: false, 
         status: 404, 
@@ -117,21 +147,17 @@ router.patch('/:id', async (req, res) => {
 })
 
 
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params
+router.post('/delete/email/:email', async (req, res) => {
+  const { email } = req.params
   try {
-    const user = await User.findByIdAndRemove(id)
-    if (!user || !mongoose.Types.ObjectId.isValid(id)) {
+    const user = await User.findOneAndRemove({ email: email })
+    if (!user) {
       return res.status(404).json({ 
         success: false, 
         status: 404, 
-        message: `Requested user with id=${id} was not found!` 
+        message: `Requested user with email=${email} was not found!` 
     })}
-    return res.status(200).json({ 
-      success: true, 
-      status: 200, 
-      message: `Requested user with id=${id} was successfuly deleted!` 
-    })
+    return res.status(200).render('pages/unsubscribe_success')
   } catch (error) {
     return res.status(500).json({ 
       success: false, 
@@ -158,5 +184,7 @@ router.delete('/', async (req, res) => {
     })
   }
 })
+
+
 
 module.exports = router
