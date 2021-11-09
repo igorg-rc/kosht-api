@@ -9,7 +9,7 @@ const livereload = require("livereload");
 const connectLiveReload = require("connect-livereload");
 const Post = require('./mongoose/models/Post')
 const { User } = require('./mongoose/models/User')
-const sendMail = require('./helpers/nodemailer')
+// const sendMail = require('./helpers/nodemailer')
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.server.once("connection", () => {
@@ -70,16 +70,16 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
 
-app.get('/test-route/:email', (req, res) => {
-  Post.find().then(posts => {
-    User.findOne({ email: req.params.email }).then(user => {
-      res.render('pages/index', { 
-        articles: posts,
-        email: req.params.email
-      })
-    })
-  })
-})
+// app.get('/test-route/:email', (req, res) => {
+//   Post.find().then(posts => {
+//     User.findOne({ email: req.params.email }).then(user => {
+//       res.render('pages/index', { 
+//         articles: posts,
+//         email: req.params.email
+//       })
+//     })
+//   })
+// })
 
 // sendMail()
 
