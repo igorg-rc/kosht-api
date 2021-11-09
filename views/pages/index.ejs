@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap" rel="stylesheet">
+    <link href="//db.onlinewebfonts.com/c/1dc8ecd8056a5ea7aa7de1db42b5b639?family=Gilroy" rel="stylesheet" type="text/css"/>
+    <style>
+      /* * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }  */
+
+      body { 
+        padding: 0;
+        margin: 0;
+        font-family: 'Gilroy', 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+      }
+
+      .container {
+        width: 80%;
+        border-radius: 6px;
+        margin: 0 auto !important;
+      }
+      
+      main {
+        background-color: #E5E5E5 !important; 
+        width: 100% !important;
+        padding: 20px 0;
+      }
+
+      .header {
+        background-color: #2E3A59;
+      }
+
+      .header-content {
+        padding: 5px 0;
+      }
+      
+      .header-text {
+        /* color: #FFFFFF !important; */
+        color: white !important;
+        font-family: 'Roboto', sans-serif !important;
+        font-size: 18px !important;
+      }
+
+      .page-title {
+        padding-bottom: 10px;
+      }
+
+      .footer {
+        padding: 20px 0;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      .text-muted {
+        color: #A5A5A5;
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .jumbotron {
+        margin: 0 auto;
+        padding: 20px;
+        background: #FFFFFF !important;
+        width: 70% !important;
+        border: 1px sold #2E3A59 !important;
+        box-shadow: 0px 8px 25px rgba(83, 89, 144, 0.07);
+        border-radius: 6px;
+        text-align: justify;
+      }
+
+      .articles {
+        padding: 0 30px;
+      }
+
+      .article-list {
+        list-style: none;
+        padding-left: 0;
+        font-size: 16px;
+        font-family: 'Gilroy';
+      }
+
+      .article-list-item {
+        color: #2E3A59;
+        margin-bottom: 20px !important;
+        margin: 10px 0 !important;
+      }
+
+      .article-item-link, 
+      .text-link {
+        font-family: 'Roboto', sans-serif; 
+        color: #2E3A59;
+        font-weight: 500;
+        text-decoration: none;
+        text-align: left;
+      }
+
+      .article-item-link:hover {
+        color: #5669FF !important;
+        cursor: pointer !important;
+        text-decoration: none;
+      }
+
+      h1 {
+        font-family: 'Gilroy', sans-serif !important;
+        font-style: normal;
+        font-weight: 800 !important;
+        font-size: 20px !important;
+        text-align: center;
+        color: #2E3A59;
+      }
+
+      .description {
+        font-family: 'Roboto', sans-serif;
+        color: #A5A5A5;
+        font-size: 12px;
+        margin-top: 5px !important;
+        margin-bottom: 5px !important;
+        line-height: 100%;
+      }
+
+      .date {
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        color: #5669FF !important;
+      }
+
+      .copyright {
+        padding: 30px 0;
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        color: #2E3A59;
+      }
+
+      form {
+        display: inline;
+      }
+
+      .unsubscribe-button {
+        background: none!important;
+        border: none;
+        padding: 0!important;
+        /*optional*/
+        font-family: arial, sans-serif;
+        color: #069;
+        font-size: 20px !important;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .unsubscribe-button:hover {
+        color: #5669FF !important;
+      }
+
+      .unsubscribe-p {
+        font-family: 'Gilroy', sans-serif !important;
+        font-style: normal;
+        font-weight: 800 !important;
+        font-size: 20px !important;
+        text-align: center;
+        color: #2E3A59;
+      }
+
+      @media (max-width: 1200px) {
+        .container {
+          width: 100% !important;
+          border: none !important;
+        }
+        .jumbotron {
+          width: 90% !important;
+        }
+      }
+    </style>
+</head>
+<body>
+
+  <div class="container">
+  <header class="header">
+    <div class="header-content">
+      <p class="text-center text-muted header-text">
+        Кошт - Розповідаємо про особисті фінанси
+      </p>
+    </div>
+  </header>
+  <main>
+    <div class="jumbotron">
+      <h1 class="page-title">Привіт, <%= email %>! Вітаємо в нашому дайджесті новин за тижень!</h1>
+      <div class="articles">
+        <% if (articles && articles.length > 0) { %>
+          <ul class="article-list">
+            <% for (let item of articles) { %>
+            <li class="articles-list-item">
+              <a class="article-item-link" target="_blank" href="https://kosht-clone.netlify.app/<%= item.slug %>"><%= item.title %></a>
+              <p class="description"><%= item.description %></p>
+              <%
+                const monthNames = ["01", "02", "03","04", "05", "06", "07","08", "09", "10","11", "12"]
+                const d = item.createdAt.getDate();
+                const m = monthNames[item.createdAt.getMonth()];
+                const y = item.createdAt.getFullYear();
+              %>
+              <p class="date"><%= d+ '.' +m+ '.' +y %></p>
+              <% } %>
+            </li>
+          </ul>
+        <% } %>
+
+      </div>
+      <span class="unsubscribe-p">Якщо Ви підписалися  на розсилку помилково, чи даний матеріал невідповідний, ви можете 
+        <form action="https://kosht-draft.herokuapp.com/api/users/delete/email/<%= email %>" method="post" class="form">  
+          <button class="unsubscribe-button" type="submit">відписатися</button>
+        </form> тижневого дайджесту.
+      </span>
+     
+    </div>
+    <p class="text-center copyright">
+      © Copyright <%= (new Date(Date.now())).getFullYear() %>. Кошт - Розповідаємо про особисті фінанси
+    </p>
+
+    
+  </main>
+  </div>
+
+<script>
+
+</script>
+</body>
+</html>

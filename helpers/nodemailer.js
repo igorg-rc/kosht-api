@@ -5,17 +5,17 @@ const mongoose = require('mongoose')
 const Post = require('../mongoose/models/Post')
 const { User } = require('../mongoose/models/User')
 const moment = require('moment')
-
-// const users = User.find().concat(", ").then(users => users.json()).catch(error => console.log(error))
+const fs = require('fs')
+const ejs = require('ejs')
+const path = require('path')
 
 // email message options
 const mailOptions = {
   from: keys.NODEMAILER_FROM,
   to: keys.NODEMAILER_TO,
-  subject: 'Hello from nodemailer',
-  text: 'Hello from node! Hello from node! Hello from node! Hello from node! Hello from node! Hello from node!'
+  subject: 'Тижневий дайджест новин від сайту kosht.com.ua',
+  text: 'Вітаємо! Отримуйте останні новини про фінанси, бізнес та інвестиції.'
 }
-
 
 // email transport settings
 const transporter = nodemailer.createTransport({
@@ -29,41 +29,40 @@ const transporter = nodemailer.createTransport({
 // sending email
 // '* * * * *' == every minute 
 // '* * * * * *' == every second 
+// '0 16 * * fri' == Friday. at 5:00 p.m.
 const sendMail = () => {
   // cron.schedule('*/10 * * * * *', () => {
-  cron.schedule('* * * * *', () => {
-    const week = 7 * 24 * 3600 * 1000
-    const diff = Date.now() - week
-
-    Post.find(
-      { createdAt: { $gt: new Date(moment(diff).format('YYYY-MM-DD')) }},
-      null, 
-      { sort: '-createdAt' }
-    )
-    .then(posts => {
+  cron.schedule('*/10 * * * * *', async () => {
+    try {
+      const week = 12 * 24 * 3600 * 1000
+      const diff = Date.now() - week
       const subscribers = []
-      User.find().then(users => users.forEach(element => subscribers.push(element.email))).catch(error => console.log(error))
-      const output = posts.map(i => 
-        `<div style="font-size: 18px">
-          <a href="https://kosht-clone.netlify.app/${i.slug}">${(i.title)}</a>
-        </div>`
-      )
-      transporter.sendMail({
-        from: process.env.NODEMAILER_FROM || keys.NODEMAILER_FROM,
-        to: subscribers,
-        subject: 'Hello from nodemailer',
-        html: `<h1 style="text-align:center">Hello from kosht! Doon't waste our weekly newslatter!</h1>
-          <h2>${output}</h2>
-        `
-      }, (error, info) => {
-        if (error) {
-          console.log(`Error during sendind a message: ${error}`)
-        } else {
-          console.log(`Sending email - 1 per minute: ${info.response}`)
-        }
-      })
-    })
-    .catch(error => console.log(error))
+      const posts = await Post.find({ createdAt: { $gt: new Date(moment(diff).format('YYYY-MM-DD')) }}, null, { sort: '-createdAt' })
+      const users = await User.find()
+      users.forEach(el => subscribers.push(el.email))
+      const email = await subscribers.find(async el => el == await User.find({email: el}))
+      for (let subscriber of subscribers) {
+        ejs.renderFile(path.join("views/pages/index.ejs"), {articles: posts, email: subscriber}, (err, data) => {
+          if (err) {
+            console.log(err)
+          } 
+          transporter.sendMail({
+          from: process.env.NODEMAILER_FROM || keys.NODEMAILER_FROM,
+          to: subscriber,
+          subject: 'Тижневий дайджест новин',
+          html: data
+          }, (error, info) => {
+            if (error) {
+              console.log(`Error during sendind a message: ${error}`)
+            } else {
+              console.log(`Sending email - 1 per minute: ${info.response}`)
+            }
+          })
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
   })
 }
 
