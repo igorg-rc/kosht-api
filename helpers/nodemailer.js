@@ -46,7 +46,7 @@ const sendMail = () => {
             console.log(err)
           } 
           transporter.sendMail({
-          from: process.env.NODEMAILER_FROM || keys.NODEMAILER_FROM,
+          from: process.env.NODEMAILER_FROM,
           to: subscriber,
           subject: 'Тижневий дайджест новин',
           html: data
