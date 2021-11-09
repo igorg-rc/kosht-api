@@ -147,25 +147,25 @@ router.patch('/:id', async (req, res) => {
 })
 
 
-// router.post('/delete/email/:email', async (req, res) => {
-//   const { email } = req.params
-//   try {
-//     const user = await User.findOneAndRemove({ email: email })
-//     if (!user) {
-//       return res.status(404).json({ 
-//         success: false, 
-//         status: 404, 
-//         message: `Requested user with email=${email} was not found!` 
-//     })}
-//     return res.status(200).render('pages/unsubscribe_success')
-//   } catch (error) {
-//     return res.status(500).json({ 
-//       success: false, 
-//       status: 500, 
-//       message: "Server error!" 
-//     })
-//   }
-// })
+router.post('/delete/email/:email', async (req, res) => {
+  const { email } = req.params
+  try {
+    const user = await User.findOneAndRemove({ email: email })
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        status: 404, 
+        message: `Requested user with email=${email} was not found!` 
+    })}
+    return res.status(200).render('pages/unsubscribe_success')
+  } catch (error) {
+    return res.status(500).json({ 
+      success: false, 
+      status: 500, 
+      message: "Server error!" 
+    })
+  }
+})
 
 
 router.delete('/', async (req, res) => {

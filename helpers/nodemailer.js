@@ -11,7 +11,7 @@ const path = require('path')
 
 // email message options
 const mailOptions = {
-  from: keys.NODEMAILER_FROM,
+  from: process.env.NODEMAILER_FROM || keys.NODEMAILER_FROM,
   to: keys.NODEMAILER_TO,
   subject: 'Тижневий дайджест новин від сайту kosht.com.ua',
   text: 'Вітаємо! Отримуйте останні новини про фінанси, бізнес та інвестиції.'
@@ -31,16 +31,15 @@ const transporter = nodemailer.createTransport({
 // '* * * * * *' == every second 
 // '0 16 * * fri' == Friday. at 5:00 p.m.
 const sendMail = () => {
-  // cron.schedule('*/10 * * * * *', () => {
   cron.schedule('*/10 * * * * *', async () => {
     try {
-      const week = 12 * 24 * 3600 * 1000
+      const week = 7 * 24 * 3600 * 1000
       const diff = Date.now() - week
       const subscribers = []
       const posts = await Post.find({ createdAt: { $gt: new Date(moment(diff).format('YYYY-MM-DD')) }}, null, { sort: '-createdAt' })
       const users = await User.find()
       users.forEach(el => subscribers.push(el.email))
-      const email = await subscribers.find(async el => el == await User.find({email: el}))
+
       for (let subscriber of subscribers) {
         ejs.renderFile(path.join("views/pages/index.ejs"), {articles: posts, email: subscriber}, (err, data) => {
           if (err) {

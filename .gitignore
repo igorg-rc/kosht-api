@@ -1,4 +1,11 @@
 node_modules
 config
-downloads
+
+!readme.md
+downloads/
+downloads/images/
+downloads/images/posts/
+downloads/images/ui/
+downloads/images/ui/categories/
+downloads/images/ui/contacts/
 .vscode

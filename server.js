@@ -27,12 +27,6 @@ mongoose.connect(MONGO_URI, {
 .then(() => console.log("Connected to MongoDb"))
 .catch(error => process.disconnect(() => (`Unable to connect. Errors: ${error}`)))
 
-// mongoose.connection.on('open', ref => {
-//   console.log('Connected to Mongo server')
-//   mongoose.connection.db.listCollections().toArray((err, names) => {
-//     console.log(names[0])
-//   })
-// })
 app.set('view engine', 'ejs')
 
 app.use((req, res, next) => {

@@ -6,11 +6,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap" rel="stylesheet">
     <link href="//db.onlinewebfonts.com/c/1dc8ecd8056a5ea7aa7de1db42b5b639?family=Gilroy" rel="stylesheet" type="text/css"/>
     <style>
-      /* * {
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-      }  */
 
       body { 
         padding: 0;
@@ -198,7 +193,7 @@
           <ul class="article-list">
             <% for (let item of articles) { %>
             <li class="articles-list-item">
-              <a class="article-item-link" target="_blank" href="http://localhost:3000/<%= item.slug %>"><%= item.title %></a>
+              <a class="article-item-link" target="_blank" href="https://kosht-clone.netlify.app/<%= item.slug %>"><%= item.title %></a>
               <p class="description"><%= item.description %></p>
               <%
                 const monthNames = ["01", "02", "03","04", "05", "06", "07","08", "09", "10","11", "12"]
@@ -214,9 +209,9 @@
 
       </div>
       <span class="unsubscribe-p">Якщо Ви підписалися  на розсилку помилково, чи даний матеріал невідповідний, ви можете 
-        <form action="http://localhost:5000/api/users/delete/email/<%= email %>" method="post" class="form">  
+        <form action="https://kosht-api.herokuapp.com/api/users/delete/email/<%= email %>" method="post" class="form">  
           <button class="unsubscribe-button" type="submit">відписатися</button>
-        </form> тижневого дайджесту.
+        </form> від тижневого дайджесту.
       </span>
      
     </div>
