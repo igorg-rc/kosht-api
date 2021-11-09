@@ -32,7 +32,7 @@ const transporter = nodemailer.createTransport({
 const sendMail = () => {
   cron.schedule('*/10 * * * * *', async () => {
     try {
-      const week = 12 * 24 * 3600 * 1000
+      const week = 30 * 24 * 3600 * 1000
       const diff = Date.now() - week
       const subscribers = []
       const posts = await Post.find({ createdAt: { $gt: new Date(moment(diff).format('YYYY-MM-DD')) }}, null, { sort: '-createdAt' })
