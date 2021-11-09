@@ -31,7 +31,7 @@ const transporter = nodemailer.createTransport({
 // '* * * * * *' == every second 
 // '0 16 * * fri' == Friday. at 5:00 p.m.
 const sendMail = () => {
-  cron.schedule('*/10 * * * * *', async () => {
+  cron.schedule('* * * * *', async () => {
     try {
       const week = 7 * 24 * 3600 * 1000
       const diff = Date.now() - week
