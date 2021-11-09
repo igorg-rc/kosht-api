@@ -9,7 +9,7 @@ const livereload = require("livereload");
 const connectLiveReload = require("connect-livereload")
 const Post = require('./mongoose/models/Post')
 const { User } = require('./mongoose/models/User')
-// const sendMail = require('./helpers/nodemailer')
+const sendMail = require('./helpers/nodemailer')
 
 const liveReloadServer = livereload.createServer()
 liveReloadServer.server.once("connection", () => {
