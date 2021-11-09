@@ -6,12 +6,12 @@ const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
 const app = express()
 const livereload = require("livereload");
-const connectLiveReload = require("connect-livereload");
+const connectLiveReload = require("connect-livereload")
 const Post = require('./mongoose/models/Post')
 const { User } = require('./mongoose/models/User')
 // const sendMail = require('./helpers/nodemailer')
 
-const liveReloadServer = livereload.createServer();
+const liveReloadServer = livereload.createServer()
 liveReloadServer.server.once("connection", () => {
   setTimeout(() => {
     liveReloadServer.refresh("/");
@@ -78,4 +78,6 @@ app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' })
 // sendMail()
 
 
+
+ 
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))
