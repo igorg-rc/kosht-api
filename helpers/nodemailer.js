@@ -10,18 +10,18 @@ const path = require('path')
 
 // email message options
 const mailOptions = {
-  from: process.env.NODEMAILER_FROM || require('../config/keys').NODEMAILER_FROM,
-  to: process.env.NODEMAILER_TO || require('../config/keys').NODEMAILER_TO,
+  from: process.env.NODEMAILER_FROM,
+  to: process.env.NODEMAILER_TO,
   subject: 'Тижневий дайджест новин від сайту kosht.com.ua',
   text: 'Вітаємо! Отримуйте останні новини про фінанси, бізнес та інвестиції.'
 }
 
 // email transport settings
 const transporter = nodemailer.createTransport({
-  service: process.env.NODEMAILER_SERVICE || require('../config/keys').NODEMAILER_SERVICE,
+  service: process.env.NODEMAILER_SERVICE,
   auth: {
-    user: process.env.NODEMAILER_USER || require('../config/keys').NODEMAILER_USER,
-    pass: process.env.NODEMAILER_PASS || require('../config/keys').NODEMAILER_PASS
+    user: process.env.NODEMAILER_USER,
+    pass: process.env.NODEMAILER_PASS
   }
 })
 
@@ -45,7 +45,7 @@ const sendMail = () => {
             console.log(err)
           } 
           transporter.sendMail({
-          from: process.env.NODEMAILER_FROM || require('../config/keys').NODEMAILER_FROM,
+          from: process.env.NODEMAILER_FROM,
           to: subscriber,
           subject: 'Тижневий дайджест новин',
           html: data
