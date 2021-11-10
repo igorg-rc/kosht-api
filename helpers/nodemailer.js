@@ -29,11 +29,11 @@ const oAuth2Client = new google.auth.OAuth2(
 
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-async function sendMail() {
+const sendEmail = async () => {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
 
-    const week = 7 * 24 * 3600 * 1000
+    const week = 30 * 24 * 3600 * 1000
     const diff = Date.now() - week
     const subscribers = []
     const posts = await Post.find({ createdAt: { $gt: new Date(moment(diff).format('YYYY-MM-DD')) }}, null, { sort: '-createdAt' })
@@ -49,8 +49,8 @@ async function sendMail() {
         clientSecret: CLIENT_SECRET,
         refreshToken: REFRESH_TOKEN,
         accessToken: accessToken,
-      },
-    });
+      }
+    })
 
     const mailOptions = {
       from: NODEMAILER_FROM,
@@ -58,7 +58,7 @@ async function sendMail() {
       subject: 'Hello from gmail using API',
       text: 'Hello from gmail email using API',
       html: '<h1>Hello from gmail email using API</h1>',
-    };
+    }
 
     const result = await transport.sendMail(mailOptions)
     return result;
@@ -67,13 +67,13 @@ async function sendMail() {
   }
 }
 
-cron.schedule('*/60 * * * *', () => {
-  sendMail()
+cron.schedule('*/10 * * * *', () => {
+  sendEmail()
     .then((result) => console.log('Email sent...', result))
     .catch((error) => console.log(error.message))
 })
 
-module.exports = sendMail
+module.exports = sendEmail
 
 // email message options
 // const mailOptions = {
@@ -99,7 +99,7 @@ module.exports = sendMail
 // const sendMail = () => {
 //   cron.schedule('*/10 * * * * *', async () => {
 //     try {
-//       const week = 30 * 24 * 3600 * 1000
+//       const week = 7 * 24 * 3600 * 1000
 //       const diff = Date.now() - week
 //       const subscribers = []
 //       const posts = await Post.find({ createdAt: { $gt: new Date(moment(diff).format('YYYY-MM-DD')) }}, null, { sort: '-createdAt' })
