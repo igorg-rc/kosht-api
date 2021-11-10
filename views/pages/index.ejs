@@ -193,7 +193,7 @@
           <ul class="article-list">
             <% for (let item of articles) { %>
             <li class="articles-list-item">
-              <a class="article-item-link" target="_blank" href="https://kosht-clone.netlify.app/<%= item.slug %>"><%= item.title %></a>
+              <a class="article-item-link" target="_blank" href="http://localhost:3000/<%= item.slug %>"><%= item.title %></a>
               <p class="description"><%= item.description %></p>
               <%
                 const monthNames = ["01", "02", "03","04", "05", "06", "07","08", "09", "10","11", "12"]
@@ -209,7 +209,7 @@
 
       </div>
       <span class="unsubscribe-p">Якщо Ви підписалися  на розсилку помилково, чи даний матеріал невідповідний, ви можете 
-        <form action="https://kosht-api.herokuapp.com/api/users/delete/email/<%= email %>" method="post" class="form">  
+        <form action="http://localhost:5000/api/users/delete/email/<%= email %>" method="post" class="form">  
           <button class="unsubscribe-button" type="submit">відписатися</button>
         </form> від тижневого дайджесту.
       </span>
