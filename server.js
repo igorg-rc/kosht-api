@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const crone = require('node-cron')
+const cron = require('node-cron')
 const PORT = process.env.PORT || require('./config/keys').PORT
 const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
@@ -10,7 +10,7 @@ const livereload = require("livereload");
 const connectLiveReload = require("connect-livereload")
 const Post = require('./mongoose/models/Post')
 const { User } = require('./mongoose/models/User')
-const sendMail = require('./helpers/nodemailer')
+const sendEmail = require('./helpers/nodemailer')
 
 const liveReloadServer = livereload.createServer()
 liveReloadServer.server.once("connection", () => {
@@ -76,8 +76,16 @@ app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' })
 //   })
 // })
 
-// sendMail()
-
-
+cron.schedule('*/10 * * * *', () => {
+  User.find().then(users => {
+    if (users.length > 0) {
+    sendEmail()
+      .then(result => console.log('Email sent...'))
+      .catch(error => console.log(error.message))
+    } else {
+      return
+    }
+  })
+})
  
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))
