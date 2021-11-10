@@ -77,7 +77,7 @@ app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' })
 //   })
 // })
 
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('0 17 * * FRI', () => {
   User.find().then(users => {
     if (users.length > 0) {
     sendEmail()
