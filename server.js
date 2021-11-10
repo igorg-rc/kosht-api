@@ -57,6 +57,7 @@ app.use('/api/lists', require('./mongoose/routes/listsRoutes'))
 app.use('/api/actions', require('./mongoose/routes/actionsRoutes'))
 app.use('/api/users', require('./mongoose/routes/usersRoutes'))
 app.use('/api/contacts', require('./mongoose/routes/contactsRoutes'))
+app.use('/utility', require('./mongoose/routes/utilityRoutes'))
 
 app.use('/downloads/images/ui/contacts', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'contacts')))
 app.use('/downloads/images/ui/categories', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'categories')))
@@ -76,7 +77,7 @@ app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' })
 //   })
 // })
 
-cron.schedule('*/10 * * * *', () => {
+cron.schedule('*/5 * * * *', () => {
   User.find().then(users => {
     if (users.length > 0) {
     sendEmail()

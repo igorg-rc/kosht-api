@@ -157,7 +157,7 @@ router.post('/delete/email/:email', async (req, res) => {
         status: 404, 
         message: `Requested user with email=${email} was not found!` 
     })}
-    return res.status(200).render('pages/unsubscribe_success')
+    return res.status(200).redirect('/utility/unsubscribed')
   } catch (error) {
     return res.status(500).json({ 
       success: false, 
@@ -166,6 +166,8 @@ router.post('/delete/email/:email', async (req, res) => {
     })
   }
 })
+
+
 
 
 router.delete('/', async (req, res) => {
