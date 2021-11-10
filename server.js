@@ -89,4 +89,5 @@ cron.schedule('0 17 * * FRI', () => {
   })
 })
  
+
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))
