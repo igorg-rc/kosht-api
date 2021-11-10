@@ -9,16 +9,16 @@ const fs = require('fs')
 const ejs = require('ejs')
 const path = require('path')
 
-const NODEMAILER_FROM = 'IGOR GAYVORONSKY <igor.gayvoronsky@gmail.com>'
-const NODEMAILER_TO = 'igor.gayvoronsky.rc@gmail.com'
-const NODEMAILER_USER = 'igor.gayvoronsky@gmail.com'
-const NODEMAILER_PASS = 'igor_1987'
-const NODEMAILER_SERVICE = 'gmail'
-
-const CLIENT_ID = process.env.CLIENT_ID || '328790408403-9gukrnb4bd4u31csngivfdm30ul4thbd.apps.googleusercontent.com'
-const CLIENT_SECRET = process.env.CLIENT_SECRET || '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' 
-const REDIRECT_URI = process.env.REDIRECT_URI ||'https://developers.google.com/oauthplayground'
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN ||'1//04REMrB6rhxX-CgYIARAAGAQSNgF-L9IrRg_W6UN_J8o9Mv-_y42b2KTVW28Z0bnRzVTI1_mzBRtkapcS4rlslCL1EP4HHTrTOA'
+const NODEMAILER_FROM = process.env.NODEMAILER_FROM || require('../config/keys').NODEMAILER_FROM
+const NODEMAILER_TO = process.env.NODEMAILER_TO || require('../config/keys').NODEMAILER_TO
+const NODEMAILER_USER = process.env.NODEMAILER_USER || require('../config/keys').NODEMAILER_USER
+const NODEMAILER_PASS = process.env.NODEMAILER_PASS || require('../config/keys').NODEMAILER_PASS
+const NODEMAILER_SERVICE = process.env.NODEMAILER_SERVICE || require('../config/keys').NODEMAILER_SERVICE
+const TYPE = process.env.TYPE || require('../config/keys').TYPE
+const CLIENT_ID = process.env.CLIENT_ID || require('../config/keys').CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET || require('../config/keys').CLIENT_SECRET
+const REDIRECT_URI = process.env.REDIRECT_URI || require('../config/keys').REDIRECT_URI
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN || require('../config/keys').REFRESH_TOKEN
 
 
 const oAuth2Client = new google.auth.OAuth2(
@@ -33,7 +33,7 @@ async function sendMail() {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
 
-    const week = 30 * 24 * 3600 * 1000
+    const week = 7 * 24 * 3600 * 1000
     const diff = Date.now() - week
     const subscribers = []
     const posts = await Post.find({ createdAt: { $gt: new Date(moment(diff).format('YYYY-MM-DD')) }}, null, { sort: '-createdAt' })
@@ -41,10 +41,10 @@ async function sendMail() {
     users.forEach(el => subscribers.push(el.email))
 
     const transport = nodemailer.createTransport({
-      service: 'gmail',
+      service: NODEMAILER_SERVICE,
       auth: {
-        type: 'OAuth2',
-        user: 'igor.gayvoronsky@gmail.com',
+        type: TYPE,
+        user: NODEMAILER_USER,
         clientId: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
         refreshToken: REFRESH_TOKEN,
@@ -53,8 +53,8 @@ async function sendMail() {
     });
 
     const mailOptions = {
-      from: process.env.NODEMAILER_FROM || 'IGOR GAYVORONSKY <igor.gayvoronsky@gmail.com>',
-      to: process.env.NODEMAILER_TO || 'igor.gayvoronsky.rc@gmail.com',
+      from: NODEMAILER_FROM,
+      to: NODEMAILER_TO,
       subject: 'Hello from gmail using API',
       text: 'Hello from gmail email using API',
       html: '<h1>Hello from gmail email using API</h1>',
