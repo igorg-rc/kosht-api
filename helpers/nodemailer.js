@@ -67,7 +67,7 @@ async function sendMail() {
   }
 }
 
-cron.schedule('* * * * *', () => {
+cron.schedule('*/60 * * * *', () => {
   sendMail()
     .then((result) => console.log('Email sent...', result))
     .catch((error) => console.log(error.message))
