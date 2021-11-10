@@ -1,10 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-// const PORT = process.env.PORT || require('./config/keys').PORT
-// const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
-const PORT = process.env.PORT
-const MONGO_URI = process.env.MONGO_URI
+const crone = require('node-cron')
+const PORT = process.env.PORT || require('./config/keys').PORT
+const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
 const app = express()
 const livereload = require("livereload");
@@ -77,7 +76,8 @@ app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' })
 //   })
 // })
 
-sendMail()
+// sendMail()
+
 
  
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))
