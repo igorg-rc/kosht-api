@@ -2,22 +2,21 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const cron = require('node-cron')
-const PORT = process.env.PORT || require('./config/keys').PORT
+const SERVER_PORT = process.env.SERVER_PORT || require('./config/keys').SERVER_PORT
 const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
 const app = express()
-const livereload = require("livereload");
-const connectLiveReload = require("connect-livereload")
+
 const Post = require('./mongoose/models/Post')
 const { User } = require('./mongoose/models/User')
 const sendEmail = require('./helpers/nodemailer')
 
-const liveReloadServer = livereload.createServer()
-liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/");
-  }, 100);
-})
+// plain nodejs stuff
+const http = require('http')
+const https = require('https')
+const request = require('request')
+const fs = require('fs')
+
 
 mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true,
@@ -48,7 +47,6 @@ app.use(cors({
 
 app.use(express.json({ extended: true }))
 app.use(express.urlencoded({ extended: true }))
-app.use(connectLiveReload())
 
 app.use('/api/posts', require('./mongoose/routes/postsRoutes'))
 app.use('/api/tags', require('./mongoose/routes/tagsRoutes'))
@@ -64,7 +62,7 @@ app.use('/downloads/images/ui/categories', express.static(path.join(__dirname, '
 app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'posts')))
 app.use('/public', express.static(path.join(__dirname, 'public')))
 
-app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
+app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server___' }))
 
 // app.get('/test-route/:email', (req, res) => {
 //   Post.find().then(posts => {
@@ -77,6 +75,9 @@ app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' })
 //   })
 // })
 
+
+
+
 cron.schedule('0 17 * * FRI', () => {
   User.find().then(users => {
     if (users.length > 0) {
@@ -88,6 +89,7 @@ cron.schedule('0 17 * * FRI', () => {
     }
   })
 })
+
  
 
-app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))
+app.listen(SERVER_PORT, () => console.log(`Application is running on port ${SERVER_PORT}...`))
