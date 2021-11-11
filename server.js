@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const cron = require('node-cron')
-const SERVER_PORT = process.env.SERVER_PORT || require('./config/keys').SERVER_PORT
+const PORT = process.env.PORT || require('./config/keys').PORT
 const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
 const app = express()
@@ -92,4 +92,4 @@ cron.schedule('0 17 * * FRI', () => {
 
  
 
-app.listen(SERVER_PORT, () => console.log(`Application is running on port ${SERVER_PORT}...`))
+app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))

@@ -1,7 +1,6 @@
 const router = require('express').Router()
 const Post = require('../models/Post')
 const API_URL = process.env.API_URL || require('../../config/keys').API_URL
-const CLIENT_PORT = process.env.CLIENT_PORT || require('../../config/keys').CLIENT_PORT
 const EDITOR_EMAIL = process.env.EDITOR_EMAIL || require('../../config/keys').EDITOR_EMAIL
 
 router.get('/unsubscribed', (req, res) => {
@@ -33,7 +32,7 @@ router.get("/rss.xml", async (req, res, next) => {
     for (let post of posts) {
       data += `<item> 
          <title>${post.title}</title>
-         <link>${API_URL}:${CLIENT_PORT}/${post.slug}</link>
+         <link>${API_URL}/${post.slug}</link>
          <description>${post.description}</description>
       </item>`
     }
