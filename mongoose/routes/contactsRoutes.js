@@ -33,14 +33,11 @@ router.get('/:id', async (req, res) => {
 
 
 router.post('/', uploadContactFile.single('image'), async (req, res) => {
-  const title_ua = req.body.title_ua
-  const title_en = req.body.title_en
-  const link = req.body.link
-  const imgUrl = req.file.path
+  const title_ua = req.body.title_ua ? req.body.title_ua : null
+  const title_en = req.body.title_en ? req.body.title_en : null
+  const link = req.body.link ? req.body.link : null
+  const imgUrl = req.file ? req.file.path : null
   try {
-    if (!title_ua || !title_en || !link || !imgUrl) {
-      return res.status(400).json({ message: "Fill all fields of form!"})
-    }
     const contact = new Contact({ title_ua, title_en, link, imgUrl })
     await contact.save()
     return res.status(201).json({ status: 201, success: true, data: contact })
