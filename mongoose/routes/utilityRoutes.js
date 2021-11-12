@@ -3,6 +3,14 @@ const Post = require('../models/Post')
 const API_URL = process.env.API_URL || require('../../config/keys').API_URL
 const EDITOR_EMAIL = process.env.EDITOR_EMAIL || require('../../config/keys').EDITOR_EMAIL
 
+const dateHelper = model => {
+  let pubDate = (model.createdAt).toString()
+  let index = pubDate.indexOf(" (")
+  if(~index) pubDate = pubDate.substr(0, index)
+
+  return pubDate
+}
+
 router.get('/unsubscribed', (req, res) => {
   res.status(200).render('pages/unsubscribe_success')
 })
@@ -24,16 +32,18 @@ router.get("/rss.xml", async (req, res, next) => {
     data += `<title>Кошт</title>`
     data += `<link>http://kosht-clone.netlify.app</link>`
     data += `<description>Говоримо особисті фінанси</description>`
-    data += `<pubDate>${pubDate}</pubDate>`
+    data += `<pubDate>${dateHelper(lastPost)}</pubDate>`
     data += `<managingEditor>${EDITOR_EMAIL}</managingEditor>`
     data += `<language>uk</language>`
   
     data += `<items>`
     for (let post of posts) {
+      
       data += `<item> 
-         <title>${post.title}</title>
+         <title><![CDATA[ ${post.title} ]]></title>
          <link>${API_URL}/${post.slug}</link>
-         <description>${post.description}</description>
+         <description><![CDATA[ ${post.description} ]]></description>
+         <pubDate>${dateHelper(post)}</pubDate>
       </item>`
     }
     data += `</items>`
