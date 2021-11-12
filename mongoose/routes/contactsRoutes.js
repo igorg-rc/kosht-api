@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
     await contact.save()
     return res.status(201).json({ status: 201, success: true, data: contact })
   } catch (error) {
-    return res.status(500).json({ status: 500, success: true, message: "Server error!" })
+    return res.status(500).json({ status: 500, success: false, message: "Server error!" })
   }
 })
 
