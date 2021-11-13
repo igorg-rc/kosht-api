@@ -4,6 +4,7 @@ const Category = require('../models/Category')
 const { uploadCategoryFile } = require('../../helpers/uploadFile')
 const deleteFile = require('../../helpers/deleteFile')
 
+const getSlug = makeSlugEn
 
 router.get('/', async (req, res) => {
   try {
@@ -79,11 +80,15 @@ router.patch(
     try {
       const category = await Category.findById(id)
       if (!category) return res.status(404).json("Requested category was not found!")
-      if (category.imgUrl_main) {
+      
+      if (req.files && category.imgUrl_main) {
         deleteFile(category.imgUrl_main)
+        category.imgUrl_main = null
       }
-      if (category.imgUrl_hover) {
+      
+      if (req.files && category.imgUrl_hover) {
         deleteFile(category.imgUrl_hover)
+        category.imgUrl_hover = null
       }
       category.title_ua = req.body ? req.body.title_ua : category.title_ua
       category.title_en = req.body ? req.body.title_en : category.title_en
@@ -93,7 +98,7 @@ router.patch(
       await category.save()
       res.status(201).json({ success: true, category: category, status: 201 })
     } catch (error) {
-      res.status(500).json(error)
+      res.status(500).json(error.message)
     }
   }
 )

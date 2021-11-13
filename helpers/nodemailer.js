@@ -1,11 +1,8 @@
 const nodemailer = require('nodemailer')
-const cron = require('node-cron')
-const mongoose = require('mongoose')
 const Post = require('../mongoose/models/Post')
 const { User } = require('../mongoose/models/User')
 const { google } = require('googleapis')
 const moment = require('moment')
-const fs = require('fs')
 const ejs = require('ejs')
 const path = require('path')
 
@@ -17,7 +14,6 @@ const CLIENT_ID = process.env.CLIENT_ID || require('../config/keys').CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET || require('../config/keys').CLIENT_SECRET
 const REDIRECT_URI = process.env.REDIRECT_URI || require('../config/keys').REDIRECT_URI
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN || require('../config/keys').REFRESH_TOKEN
-
 
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,

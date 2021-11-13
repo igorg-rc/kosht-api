@@ -6,16 +6,9 @@ const PORT = process.env.PORT || require('./config/keys').PORT
 const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
 const app = express()
-
-const Post = require('./mongoose/models/Post')
 const { User } = require('./mongoose/models/User')
 const sendEmail = require('./helpers/nodemailer')
-
-// plain nodejs stuff
-const http = require('http')
-const https = require('https')
-const request = require('request')
-const fs = require('fs')
+// const Post = require('./mongoose/models/Post')
 
 
 mongoose.connect(MONGO_URI, {
@@ -76,8 +69,6 @@ app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server___'
 // })
 
 
-
-
 cron.schedule('0 17 * * FRI', () => {
   User.find().then(users => {
     if (users.length > 0) {
@@ -90,6 +81,5 @@ cron.schedule('0 17 * * FRI', () => {
   })
 })
 
- 
 
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))

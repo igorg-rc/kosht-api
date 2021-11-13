@@ -11,6 +11,7 @@ const dateHelper = model => {
   return pubDate
 }
 
+
 router.get('/unsubscribed', (req, res) => {
   res.status(200).render('pages/unsubscribe_success')
 })
@@ -35,10 +36,8 @@ router.get("/rss.xml", async (req, res, next) => {
     data += `<pubDate>${dateHelper(lastPost)}</pubDate>`
     data += `<managingEditor>${EDITOR_EMAIL}</managingEditor>`
     data += `<language>uk</language>`
-  
     data += `<items>`
     for (let post of posts) {
-      
       data += `<item> 
          <title><![CDATA[ ${post.title} ]]></title>
          <link>${API_URL}/${post.slug}</link>
