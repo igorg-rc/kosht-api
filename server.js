@@ -1,15 +1,12 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const cron = require('node-cron')
 const PORT = process.env.PORT || require('./config/keys').PORT
 const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
-const app = express()
-const { User } = require('./mongoose/models/User')
-// const sendEmail = require('./helpers/nodemailer')
-// const getRSS = require('./helpers/rss/rssToFile')
 const { getRSSJob, sendEmailJob } = require('./helpers/cronJobs')
+
+const app = express()
 
 mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true,
@@ -56,17 +53,6 @@ app.use('/downloads/images/posts', express.static(path.join(__dirname, 'download
 app.use('/public', express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server___' }))
-
-// app.get('/test-route/:email', (req, res) => {
-//   Post.find().then(posts => {
-//     User.findOne({ email: req.params.email }).then(user => {
-//       res.render('pages/index', { 
-//         articles: posts,
-//         email: req.params.email
-//       })
-//     })
-//   })
-// })
 
 getRSSJob()
 sendEmailJob()

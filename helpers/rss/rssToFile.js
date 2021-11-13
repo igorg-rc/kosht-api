@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const Post = require('../../mongoose/models/Post')
 const { dateFormatter } = require('../../helpers/dateTimeFormatters')
-const API_URL = process.env.API_URL || require('../../config/keys').API_URL
+const API_URL = 'https://kosht-clone.netlify.app' || require('../../config/keys').API_URL
 const EDITOR_EMAIL = process.env.EDITOR_EMAIL || require('../../config/keys').EDITOR_EMAIL
 
 const getRSS = async () => {
