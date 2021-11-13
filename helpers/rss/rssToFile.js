@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const Post = require('../../mongoose/models/Post')
 const { dateFormatter } = require('../../helpers/dateTimeFormatters')
-const API_URL = 'https://kosht-clone.netlify.app' || require('../../config/keys').API_URL
+const SITE_URL = 'https://kosht-clone.netlify.app' || require('../../config/keys').SITE_URL
 const EDITOR_EMAIL = process.env.EDITOR_EMAIL || require('../../config/keys').EDITOR_EMAIL
 
 const getRSS = async () => {
@@ -40,7 +40,7 @@ const getRSS = async () => {
           title: post.title,
           description: post.description,
           pubdate: dateFormatter(post),
-          url: `${API_URL}/${post.slug}` // link to the item
+          url: `${SITE_URL}/${post.slug}` // link to the item
         }
       )
     }
