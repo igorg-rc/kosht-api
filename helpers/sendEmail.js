@@ -15,12 +15,7 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET || require('../config/keys').CLI
 const REDIRECT_URI = process.env.REDIRECT_URI || require('../config/keys').REDIRECT_URI
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN || require('../config/keys').REFRESH_TOKEN
 
-const oAuth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  REDIRECT_URI
-);
-
+const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
 
 const sendEmail = async () => {
@@ -28,7 +23,12 @@ const sendEmail = async () => {
     const week = 7 * 24 * 3600 * 1000
     const diff = Date.now() - week
     const subscribers = []
-    const posts = await Post.find({ createdAt: { $gt: new Date(moment(diff).format('YYYY-MM-DD')) }}, null, { sort: '-createdAt' })
+    const posts = await Post.find(
+      { createdAt: { $gt: new Date(moment(diff).format('YYYY-MM-DD')) }}, 
+      null, 
+      { sort: '-createdAt' }
+    )
+
     const users = await User.find()
     users.forEach(el => subscribers.push(el.email))
 

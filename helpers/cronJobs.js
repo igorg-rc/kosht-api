@@ -1,11 +1,11 @@
 const cron = require('node-cron')
-const sendEmail = require('./nodemailer')
-const getRSS = require('./rss/rssToFile')
+const sendEmail = require('./sendEmail')
+const getRSS = require('./getRSS')
 
 const getRSSJob = () => {
-  cron.schedule('* * * * *', () => {
+  cron.schedule('*/60 * * * *', () => {
     getRSS()
-    console.log("RSS for posts has been updated")
+    console.log("RSS cron job done")
   })
 }
 
