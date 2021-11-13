@@ -3,14 +3,15 @@ const Post = require('../models/Post')
 const API_URL = process.env.API_URL || require('../../config/keys').API_URL
 const EDITOR_EMAIL = process.env.EDITOR_EMAIL || require('../../config/keys').EDITOR_EMAIL
 const path = require('path')
+const { dateFormatter } = require('../../helpers/dateTimeFormatters')
 
-const dateHelper = model => {
-  let pubDate = (model.createdAt).toString()
-  let index = pubDate.indexOf(" (")
-  if(~index) pubDate = pubDate.substr(0, index)
+// const dateHelper = model => {
+//   let pubDate = (model.createdAt).toString()
+//   let index = pubDate.indexOf(" (")
+//   if(~index) pubDate = pubDate.substr(0, index)
 
-  return pubDate
-}
+//   return pubDate
+// }
 
 
 router.get('/unsubscribed', (req, res) => {
@@ -34,7 +35,7 @@ router.get("/rss.xml", async (req, res, next) => {
   //   data += `<title>Кошт</title>`
   //   data += `<link>http://kosht-clone.netlify.app</link>`
   //   data += `<description>Говоримо особисті фінанси</description>`
-  //   data += `<pubDate>${dateHelper(lastPost)}</pubDate>`
+  //   data += `<pubDate>${dateFormatter(lastPost)}</pubDate>`
   //   data += `<managingEditor>${EDITOR_EMAIL}</managingEditor>`
   //   data += `<language>uk</language>`
   //   data += `<items>`
@@ -43,7 +44,7 @@ router.get("/rss.xml", async (req, res, next) => {
   //        <title><![CDATA[ ${post.title} ]]></title>
   //        <link>${API_URL}/${post.slug}</link>
   //        <description><![CDATA[ ${post.description} ]]></description>
-  //        <pubDate>${dateHelper(post)}</pubDate>
+  //        <pubDate>${dateFormatter(post)}</pubDate>
   //     </item>`
   //   }
   //   data += `</items>`

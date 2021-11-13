@@ -7,9 +7,9 @@ const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
 const app = express()
 const { User } = require('./mongoose/models/User')
-const sendEmail = require('./helpers/nodemailer')
-// const Post = require('./mongoose/models/Post')
-
+// const sendEmail = require('./helpers/nodemailer')
+// const getRSS = require('./helpers/rss/rssToFile')
+const { getRSSJob, sendEmailJob } = require('./helpers/cronJobs')
 
 mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true,
@@ -68,18 +68,7 @@ app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server___'
 //   })
 // })
 
-
-cron.schedule('0 17 * * FRI', () => {
-  User.find().then(users => {
-    if (users.length > 0) {
-    sendEmail()
-      .then(result => console.log('Email sent...'))
-      .catch(error => console.log(error.message))
-    } else {
-      return
-    }
-  })
-})
-
+getRSSJob()
+sendEmailJob()
 
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))
