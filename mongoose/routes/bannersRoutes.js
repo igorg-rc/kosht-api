@@ -59,10 +59,10 @@ router.get('/:id', async (req, res) => {
 
 
 router.post('/', uploadBannerFile.single('banner-img'), async (req, res) => {
-  const { title, owner, link, visible } = req.body
+  const { title, owner, link } = req.body
   const imgUrl = req.file ? req.file.path : null
   try {
-    const banner = new Banner({ title, owner, imgUrl, link, visible })
+    const banner = new Banner({ title, owner, imgUrl, link })
     await banner.save()
     if (!title || !owner || !link) return res.status(400).json({ message: 'Fill all fields!' })
     res.status(201).json({ status: 201, success: true, data: banner })
