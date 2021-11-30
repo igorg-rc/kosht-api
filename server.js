@@ -45,14 +45,16 @@ app.use('/api/lists', require('./mongoose/routes/listsRoutes'))
 app.use('/api/actions', require('./mongoose/routes/actionsRoutes'))
 app.use('/api/users', require('./mongoose/routes/usersRoutes'))
 app.use('/api/contacts', require('./mongoose/routes/contactsRoutes'))
+app.use('/api/banners', require('./mongoose/routes/bannersRoutes'))
 app.use('/utility', require('./mongoose/routes/utilityRoutes'))
 
 app.use('/downloads/images/ui/contacts', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'contacts')))
 app.use('/downloads/images/ui/categories', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'categories')))
 app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'posts')))
+app.use('/downloads/images', express.static(path.join(__dirname, 'downloads', 'images')))
 app.use('/public', express.static(path.join(__dirname, 'public')))
 
-app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server___' }))
+app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
 
 getRSSJob()
 sendEmailJob()

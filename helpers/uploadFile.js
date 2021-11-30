@@ -41,6 +41,19 @@ const categoryStorage = multer.diskStorage({
   }
 })
 
+const bannerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join("downloads/images"))
+  },
+  filename: (req, file, cb) => {
+    crypto.pseudoRandomBytes(16, (error, raw) => {
+      if (error) return cb(error)
+
+      cb(null, `img_${Date.now()}_${file.originalname}`)
+    })
+  }
+})
+
 const filter = (req, file, cb) => {
   const type = file.mimetype
   if (type === 'image/jpeg' || type === 'image/png' || type === 'image/gif') {
@@ -50,22 +63,10 @@ const filter = (req, file, cb) => {
   }
 }
 
-const uploadFile = multer({
-  storage: storage,
-  filter: filter,
-  limits: { fileSize: 10000000 }
-})
+const uploadFile = multer({ storage: storage, filter: filter, limits: { fileSize: 10000000 } })
+const uploadCategoryFile = multer({ storage: categoryStorage, filter: filter, limits: { fileSize: 10000000 } })
+const uploadContactFile = multer({ storage: UIStorage, filter: filter, limits: { fileSize: 10000000 } })
+const uploadBannerFile = multer({ storage: bannerStorage, filter: filter, limits: { fileSize: 10000000 } })
+   
 
-const uploadCategoryFile = multer({
-  storage: categoryStorage,
-  filter: filter,
-  limits: { fileSize: 10000000 }
-})
-
-const uploadContactFile = multer({
-  storage: UIStorage,
-  filter: filter,
-  limits: { fileSize: 10000000 }
-})
-
-module.exports = { uploadFile, uploadCategoryFile, uploadContactFile }
+module.exports = { uploadFile, uploadCategoryFile, uploadContactFile, uploadBannerFile }

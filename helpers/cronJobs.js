@@ -3,7 +3,7 @@ const sendEmail = require('./sendEmail')
 const getRSS = require('./getRSS')
 
 const getRSSJob = () => {
-  cron.schedule('*/60 * * * *', () => {
+  cron.schedule('*/1440 * * * *', () => {
     getRSS()
     console.log("RSS cron job done")
   })
