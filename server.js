@@ -59,4 +59,5 @@ app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' })
 getRSSJob()
 sendEmailJob()
 
+
 app.listen(PORT, () => console.log(`Application is running on port ${PORT}...`))
