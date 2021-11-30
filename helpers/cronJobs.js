@@ -23,4 +23,5 @@ const sendEmailJob = () => {
   })
 }
 
+
 module.exports = {getRSSJob, sendEmailJob}

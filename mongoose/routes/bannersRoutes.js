@@ -1,6 +1,6 @@
 const router = require('express').Router()
-const Banner = require('../models/Banner')
 const mongoose = require('mongoose')
+const Banner = require('../models/Banner')
 const { uploadBannerFile } = require('../../helpers/uploadFile') 
 const deleteFile = require('../../helpers/deleteFile')
 
@@ -145,6 +145,7 @@ router.delete('/:id', async (req, res) => {
     })
   }
 })
+
 
 
 module.exports = router

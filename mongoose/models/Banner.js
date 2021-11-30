@@ -29,4 +29,5 @@ const BannerSchema = mongoose.Schema({
   }
 })
 
+
 module.exports = mongoose.model('Banner', BannerSchema)

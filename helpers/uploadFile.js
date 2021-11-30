@@ -68,4 +68,5 @@ const uploadCategoryFile = multer({ storage: categoryStorage, filter: filter, li
 const uploadContactFile = multer({ storage: UIStorage, filter: filter, limits: { fileSize: 10000000 } })
 const uploadBannerFile = multer({ storage: bannerStorage, filter: filter, limits: { fileSize: 10000000 } })
    
+
 module.exports = { uploadFile, uploadCategoryFile, uploadContactFile, uploadBannerFile }
