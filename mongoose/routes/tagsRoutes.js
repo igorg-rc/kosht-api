@@ -7,6 +7,9 @@ router.get('/', async (req, res) => {
   const tags = await Tag.find()
   try {
     if (!tags) return res.status(404).json({ message: "Tags were not found!" })
+    res.setHeader("Access-Control-Expose-Headers", "Content-Range")
+    res.setHeader("Access-Control-Expose-Headers", "Total count")
+    res.setHeader("Content-Range", "users 0-20/20")
     res.status(200).json(tags)
   } catch (error) {
     res.status(500).json({ message: "Internal server error!" })

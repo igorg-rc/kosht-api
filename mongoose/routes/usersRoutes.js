@@ -167,7 +167,24 @@ router.post('/delete/email/:email', async (req, res) => {
   }
 })
 
-
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const user = await User.findByIdAndRemove(id)
+    if (!user) return res.status(404).json({ message: "Requsted user was not found!" })
+    res.status(200).json({
+      success: true,
+      status: 204,
+      message: "Reqested user was successfuly deleted!"
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      status: 500,
+      message: "Server error!"
+    })
+  }
+})
 
 
 router.delete('/', async (req, res) => {

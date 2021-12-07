@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   try {
     const banners = await Banner.find()
     if (!banners || banners.length == 0) {
-      return res.status(404).json({ message: "Banners were not find" })
+      return res.status(404).json({ message: "Banners were not found" })
     }
     res.status(200).json({ success: true, status: 200, data: banners })
   } catch (error) {
@@ -21,7 +21,7 @@ router.get('/visible', async (req, res) => {
   try {
     const banners = await Banner.find({ visible: true })
     if (!banners || banners.length == 0) {
-      return res.status(404).json({ message: "Banners were not find" })
+      return res.status(404).json({ message: "Banners were not found" })
     }
     const selected_banner = banners[0]
     res.status(200).json({ success: true, status: 200, data: selected_banner })

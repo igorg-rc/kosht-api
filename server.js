@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 const PORT = process.env.PORT || require('./config/keys').PORT
 const MONGO_URI = process.env.MONGO_URI || require('./config/keys').MONGO_URI
 const path = require('path')
+const preHandler = require('./helpers/preHandler')
+const Tag = require('./mongoose/models/Tag')
 const { getRSSJob, sendEmailJob } = require('./helpers/cronJobs')
 
 const app = express()
@@ -19,13 +21,7 @@ mongoose.connect(MONGO_URI, {
 
 app.set('view engine', 'ejs')
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  next()
-});
+preHandler(Tag)
 
 app.use(cors({
   origin: "*",
@@ -34,6 +30,26 @@ app.use(cors({
   preflightContinue: false,
   optionsSuccessStatus: 204
 }))
+// app.use(cors());
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader("Access-Control-Expose-Headers", "Content-Range, X-Total-Count");
+  res.setHeader("Access-Control-Expose-Headers", "*");
+  next()
+});
+
+
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     res.header("Access-Control-Expose-Headers", "Content-Range, X-Total-Count");
+
+//     next();
+// });
 
 app.use(express.json({ extended: true }))
 app.use(express.urlencoded({ extended: true }))
