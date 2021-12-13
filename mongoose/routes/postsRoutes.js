@@ -109,7 +109,6 @@ router.get('/categories/:category', async (req, res) => {
 })
 
 
-// router.post('/', postImageUpload.single('image-poster'), async (req, res) => {
 router.post('/', async (req, res) => {
   const { title, body, description, tags, categories, posterImage, posterVideo, slug } = req.body
   try {
@@ -119,6 +118,32 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500).json({ data: null, success: false, status: 500, error: error })
+  }
+})
+
+
+router.patch('/id/:id', async (req, res, next) => {
+  const { id } = req.params
+  const { title, body, description, tags, categories, posterImage, posterVideo, slug } = req.body
+
+  try {
+    const post = await Post.findById(id)
+    if (!mongoose.Types.ObjectId.isValid(id) || !post) {
+      return res.status(404).json(`Requested post with id=${id} was not found!`)
+    }
+    post.title = title ? title : post.title    
+    post.body = body ? body : post.body    
+    post.description = description ? description : post.description    
+    post.tags = tags ? tags : post.tags    
+    post.categories = categories ? categories : post.categories    
+    post.posterImage = posterImage ? posterImage : post.posterImage    
+    post.posterVideo = posterVideo ? posterVideo : post.posterVideo   
+    post.slug = slug ? slug : post.slug   
+    post = post.save();
+    res.status(201).json({ data: post, success: true, status: 201 })
+  } catch (error) {
+    res.status(500).json({ message: error.message, success: false, status: 500 })
+    next()
   }
 })
 

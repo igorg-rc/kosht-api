@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
 })
 
 
-router.post('/', async (req, res) => {
+router.post('/', uploadContactFile.single('image'), async (req, res) => {
   const title_ua = req.body.title_ua ? req.body.title_ua : null
   const title_en = req.body.title_en ? req.body.title_en : null
   const link = req.body.link ? req.body.link : null

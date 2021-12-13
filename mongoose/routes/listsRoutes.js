@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const List = require('../models/List')
+const Post = require('../models/Post')
 const mongoose = require('mongoose')
 const getSlug = require('speakingurl')
 
@@ -21,8 +22,8 @@ router.get('/id/:id', async (req, res) => {
   try {
     const list = await List.find({ _id: id }).populate('posts')
     if (!list) return res.status(404).json(`Reqested list was not found!`)
-    // const selected_list = list[0]
-    res.status(200).json(list)
+    const selected_list = list[0]
+    res.status(200).json(selected_list)
   } catch (error) {
     console.log(error)
     return res.status(500).json(error)
@@ -52,6 +53,64 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500).json(error)
+  }
+})
+
+
+router.post('/:listId/add-post/:postId', async (req, res) => {
+  const { postId, listId } = req.params
+  try {
+    const post = await Post.findById(postId)
+    const list = await List.findById(listId)
+    if (!post || !mongoose.Types.ObjectId.isValid(postId)) {
+      return res.status(404).json({ message: 'Requested post was not found!' })
+    } 
+    if (!list || !mongoose.Types.ObjectId.isValid(listId)) {
+      return res.status(404).json({ message: 'Requested list was not found!' })
+    } 
+    if (!list.posts.includes(postId)) {
+      const limit = list.qty
+      if (list.posts.length === limit) {
+        res.status(400).json({ 
+          message: `Requested list is filled out! All ${limit} posts were used. Clear list to add post.`,
+          success: false,
+          status: 400
+        })
+      }
+      if (list.posts.length < limit) {
+        list.posts.push(postId)
+      } 
+    } else {
+      list.posts = list.posts.filter(item => item != postId) 
+    }
+    await list.save()
+    res.status(201).json({ success: true, data: list, status: 201 })
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message, status: 500 })
+  }
+})
+
+
+router.post('/clear-list/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const list = await List.findById(id)
+    if (!list) {
+      return res.status(404).json({ 
+        message: 'Requested list was not found', 
+        success: false, 
+        status: 404 
+      })
+    }
+    list.posts = []
+    await list.save()
+    res.status(201).json({ data: list, success: true, status: 201 })
+  } catch (error) {
+    return res.status(500).json({ 
+      success: false, 
+      message: error.message, 
+      status: 500 
+    })
   }
 })
 
