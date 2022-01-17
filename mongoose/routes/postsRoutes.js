@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
       return res.status(404).json({ status:404, success: false, message: "Posts were not fond" })
     }
     const postResults = posts.slice(startIndex, endIndex)
-    res.status(200).json(posts)
+    res.status(200).json({ data: posts, success: true, status: 200 })
   } catch (error) {
     console.log(error)
     return res.status(500).json({ message: error.message})    

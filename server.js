@@ -62,6 +62,7 @@ app.use('/api/actions', require('./mongoose/routes/actionsRoutes'))
 app.use('/api/users', require('./mongoose/routes/usersRoutes'))
 app.use('/api/contacts', require('./mongoose/routes/contactsRoutes'))
 app.use('/api/banners', require('./mongoose/routes/bannersRoutes'))
+app.use('/api/search', require('./mongoose/routes/searchRoutes'))
 app.use('/utility', require('./mongoose/routes/utilityRoutes'))
 
 app.use('/downloads/images/ui/contacts', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'contacts')))
