@@ -13,7 +13,12 @@ router.get("/", async (req, res) => {
 router.get("/:queryString", async (req, res) => {
   try {
     const queryString = req.params.queryString
-    const allPosts = await Post.find()
+    const allPosts = await Post      
+      .find()
+      .sort('-createdAt')
+      .populate('tags')
+      .populate('categories')
+      
     if (!allPosts) return res.status(404).json({success: false, message: "No posts found!"})
     const selectedPosts = allPosts.filter(item => (
       (item.title).toLowerCase().includes(queryString.toLowerCase()) ||
