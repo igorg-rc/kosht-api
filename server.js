@@ -73,6 +73,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))
 
+
 getRSSJob()
 sendEmailJob()
 
