@@ -46,7 +46,11 @@ router.get('/readmore/:slug', async (req, res) => {
 
 router.get('/slug/:slug', async (req, res) => {
   const { slug } = req.params
-  const post = await Post.find({ slug: slug }).populate('categories')
+  const post = await Post
+    .find({ slug: slug })
+    .populate('categories')
+    .populate('tags')
+    
   const selectedPost = post[0]
   res.status(200).json(selectedPost)
   try {
