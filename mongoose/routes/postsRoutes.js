@@ -46,15 +46,19 @@ router.get('/readmore/:slug', async (req, res) => {
 
 router.get('/slug/:slug', async (req, res) => {
   const { slug } = req.params
-  const post = await Post.find({ slug: slug }).populate('tags').populate('categories')
-  const selectedPost = post[0]
-  res.status(200).json(selectedPost)
   try {
-    const post = await Post.find({ slug: slug })
-    if (!mongoose.Types.ObjectId.isValid(slug) || !post) { 
-      return res.status(404).json(`Requested post with slug ${slug} was not found!`)
+    const post = await Post
+      .find({ slug: slug })
+      .populate('tags')
+      .populate('categories')
+
+    if (!post) { 
+      return res.status(404).json({message: `Requested post with slug ${slug} was not found!`})
     }
-    res.status(200).json(post)
+    
+    const selectedPost = post[0]
+
+    res.status(200).json(selectedPost)
   } catch (error) {
     return res.status(500).json({ message: 'Error: Bad request!' })
   }
