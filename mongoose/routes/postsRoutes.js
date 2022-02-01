@@ -46,7 +46,7 @@ router.get('/readmore/:slug', async (req, res) => {
 
 router.get('/slug/:slug', async (req, res) => {
   const { slug } = req.params
-  const post = await Post.find({ slug: slug }).populate('categories')
+  const post = await Post.find({ slug: slug }).populate('tags').populate('categories')
   const selectedPost = post[0]
   res.status(200).json(selectedPost)
   try {
@@ -59,6 +59,7 @@ router.get('/slug/:slug', async (req, res) => {
     return res.status(500).json({ message: 'Error: Bad request!' })
   }
 })
+
 
 router.get('/id/:id', async (req, res) => {
   const { id } = req.params
