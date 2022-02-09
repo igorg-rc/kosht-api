@@ -17,8 +17,8 @@ router.get('/', async (req, res) => {
       .sort('-createdAt')
       .populate('tags')
       .populate('categories')
-      .limit(5)
-      
+      .limit(10)
+
     if (!posts || posts.length == 0) {
       return res.status(404).json({ status:404, success: false, message: "Posts were not fond" })
     }
