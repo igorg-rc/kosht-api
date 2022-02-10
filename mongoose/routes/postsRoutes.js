@@ -3,7 +3,6 @@ const Post = require('../models/Post')
 const mongoose = require('mongoose')
 const postImageUpload = require('../../helpers/uploadFile')
 
-
 router.get('/', async (req, res) => {
   // const skip = req.query.skip && /^\d+$/.test(req.query.skip) ? Number(req.query.skip) : 0
   const limit = req.query.limit && /^\d+$/.test(req.query.limit) ? parseInt(req.query.limit) : 0
