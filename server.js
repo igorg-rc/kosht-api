@@ -37,7 +37,7 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader("Access-Control-Expose-Headers", "Content-Range, X-Total-Count");
+  // res.setHeader("Access-Control-Expose-Headers", "Content-Range, X-Total-Count");
   res.setHeader("Access-Control-Expose-Headers", "*");
   next()
 });
@@ -69,6 +69,7 @@ app.use('/downloads/images/ui/contacts', express.static(path.join(__dirname, 'do
 app.use('/downloads/images/ui/categories', express.static(path.join(__dirname, 'downloads', 'images', 'ui', 'categories')))
 app.use('/downloads/images/posts', express.static(path.join(__dirname, 'downloads', 'images', 'posts')))
 app.use('/downloads/images', express.static(path.join(__dirname, 'downloads', 'images')))
+app.use('/downloads/images/banners', express.static(path.join(__dirname, 'downloads', 'images', 'banners')))
 app.use('/public', express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => res.status(200).json({ message: 'Kosht API server' }))

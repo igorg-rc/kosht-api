@@ -43,7 +43,7 @@ const categoryStorage = multer.diskStorage({
 
 const bannerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join("downloads/images"))
+    cb(null, path.join("downloads/images/banners"))
   },
   filename: (req, file, cb) => {
     crypto.pseudoRandomBytes(16, (error, raw) => {
